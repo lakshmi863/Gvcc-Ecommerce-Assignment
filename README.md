@@ -1,6 +1,7 @@
 A full-stack e-commerce style application built for the **GVCC Solutions** assignment. Users can browse products, filter by categories, view details, and submit enquiries. The application features a React frontend, a Node.js/Express backend, and persistent data storage using SQLite.
 
 Backend url:( https://gvcc-ecommerce-backend.onrender.com )
+
 Frontend url ( https://gvcc-ecommerce-front.onrender.com )
 
 NavBar Section: 
