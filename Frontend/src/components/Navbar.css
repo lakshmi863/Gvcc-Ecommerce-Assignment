@@ -1,0 +1,49 @@
+/* Add this logic for mobile responsiveness */
+
+@media (max-width: 768px) {
+  .main-navbar {
+    flex-wrap: wrap; /* Allow items to wrap */
+    height: auto;
+    padding: 10px 15px;
+  }
+
+  /* Top row: Brand + Auth */
+  .nav-container .navbar > div {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Second row: Categories (Scrollable) */
+  .nav-links {
+    order: 3; /* Move to bottom */
+    width: 100%;
+    display: flex;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    -webkit-overflow-scrolling: touch; /* Smooth scroll iOS */
+    gap: 10px;
+  }
+
+  /* Hide scrollbar visually */
+  .nav-links::-webkit-scrollbar {
+    display: none; 
+  }
+
+  .nav-item {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    border: none;
+  }
+
+  /* Auth Section adjustments */
+  .navbar > div:last-child {
+    border-left: none !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+    margin-top: 0;
+  }
+}

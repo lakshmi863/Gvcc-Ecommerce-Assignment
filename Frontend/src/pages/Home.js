@@ -6,6 +6,9 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   
+  // Mobile Filter Toggle State
+  const [showFilters, setShowFilters] = useState(false);
+
   // URL Params
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get('category') || '';
@@ -15,29 +18,23 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   
-  // New States for Sidebar
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
-  const [sort, setSort] = useState('newest'); // default
+  const [sort, setSort] = useState('newest'); 
   
-  // Trigger fetch when these change
   useEffect(() => {
     fetchProducts();
     // eslint-disable-next-line
-  }, [page, search, categoryParam, sort]); // Note: We don't put min/max here to avoid auto-refresh while typing
+  }, [page, search, categoryParam, sort]);
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      // Build Query String
       let query = `/api/products?page=${page}&limit=9&search=${search}&category=${categoryParam}&sort=${sort}`;
-      
-      // Only add price if values exist
       if (minPrice) query += `&minPrice=${minPrice}`;
       if (maxPrice) query += `&maxPrice=${maxPrice}`;
 
       const res = await axios.get(query);
-      
       if (res.data && res.data.data) {
         setProducts(res.data.data);
         setTotalPages(res.data.meta ? res.data.meta.totalPages : 1);
@@ -53,7 +50,8 @@ const Home = () => {
 
   const handleApplyPrice = () => {
     setPage(1);
-    fetchProducts(); // Manually trigger fetch for Price
+    fetchProducts();
+    setShowFilters(false); // Close mobile sidebar on apply
   };
 
   const handleClearFilters = () => {
@@ -62,15 +60,25 @@ const Home = () => {
     setSort('newest');
     setSearch('');
     setPage(1);
-    // State updates are async, so we might need to trigger fetch in useEffect or manually
     setTimeout(fetchProducts, 100); 
+    setShowFilters(false);
   };
 
   return (
     <div className="main-layout">
       
-      {/* --- LEFT SIDEBAR --- */}
-      <aside className="sidebar">
+      {/* --- MOBILE FILTER OVERLAY --- */}
+      {showFilters && <div className="sidebar-overlay" onClick={() => setShowFilters(false)}></div>}
+
+      {/* --- SIDEBAR (Responsive) --- */}
+      <aside className={`sidebar ${showFilters ? 'mobile-open' : ''}`}>
+        
+        {/* Mobile Header Inside Sidebar */}
+        <div className="sidebar-header-mobile">
+            <h3>Filters</h3>
+            <button className="close-sidebar-btn" onClick={() => setShowFilters(false)}>&times;</button>
+        </div>
+
         <div className="filter-section">
           <h4>Search</h4>
           <input 
@@ -78,7 +86,7 @@ const Home = () => {
             placeholder="Keyword..." 
             value={search} 
             onChange={(e) => setSearch(e.target.value)}
-            style={{width: '100%', padding: '5px'}}
+            style={{width: '100%', padding: '8px', boxSizing:'border-box'}}
           />
         </div>
 
@@ -91,7 +99,7 @@ const Home = () => {
               value={minPrice} 
               onChange={(e) => setMinPrice(e.target.value)} 
             />
-            <span>to</span>
+            <span>-</span>
             <input 
               type="number" 
               placeholder="Max" 
@@ -135,15 +143,27 @@ const Home = () => {
 
         <button 
             onClick={handleClearFilters}
-            style={{background: 'transparent', border: 'none', color: '#3498db', cursor: 'pointer', textDecoration:'underline'}}
+            className="clear-filter-btn"
         >
             Clear All Filters
         </button>
       </aside>
 
-      {/* --- RIGHT CONTENT --- */}
+      {/* --- MAIN CONTENT --- */}
       <main className="content-area">
-        <h2 style={{marginTop: '0', fontSize: '1.5rem'}}>
+        
+        {/* Mobile Toggle Button */}
+        <div className="mobile-filter-bar">
+            <h2 style={{margin:0, fontSize: '1.2rem'}}>
+                {categoryParam ? categoryParam : 'All Products'}
+            </h2>
+            <button className="filter-toggle-btn" onClick={() => setShowFilters(true)}>
+                Wait... Filter ☰
+            </button>
+        </div>
+
+        {/* Desktop Header */}
+        <h2 className="desktop-header" style={{marginTop: '0', fontSize: '1.5rem'}}>
           {categoryParam ? categoryParam : 'All Products'}
         </h2>
 
@@ -161,7 +181,6 @@ const Home = () => {
                   <div className="card-body">
                     <div className="card-category">{prod.category}</div>
                     <h3>{prod.name}</h3>
-                  
                     <div className="card-price">₹{prod.price}</div>
                   </div>
                 </Link>

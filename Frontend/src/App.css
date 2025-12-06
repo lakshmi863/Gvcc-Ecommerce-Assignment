@@ -649,3 +649,143 @@ input, select {
     color: var(--accent-color);
     text-decoration: none;
 }
+
+.desktop-header { display: block; }
+.mobile-filter-bar { display: none; }
+.sidebar-header-mobile { display: none; }
+
+/* TABLETS AND MOBILE (Width < 992px) */
+@media (max-width: 992px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 cols on tablet */
+  }
+}
+
+/* MOBILE DEVICES (Width < 768px) */
+@media (max-width: 768px) {
+  
+  /* Layout: Remove side-by-side flex */
+  .main-layout {
+    display: block; 
+    padding: 10px;
+  }
+
+  /* Hide Desktop Header */
+  .desktop-header { display: none; }
+
+  /* Show Mobile Header & Filter Button */
+  .mobile-filter-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .filter-toggle-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  /* SIDEBAR: Slide-out Drawer */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%; /* Hide off-screen */
+    width: 280px;
+    height: 100vh;
+    background-color: var(--bg-sidebar);
+    z-index: 1000;
+    padding: 20px;
+    transition: left 0.3s ease-in-out;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    overflow-y: auto;
+  }
+
+  .sidebar.mobile-open {
+    left: 0; /* Slide in */
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    backdrop-filter: blur(2px);
+  }
+
+  /* Sidebar Internals for Mobile */
+  .sidebar-header-mobile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+  }
+  
+  .close-sidebar-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--text-main);
+    cursor: pointer;
+  }
+
+  .clear-filter-btn {
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    padding: 10px;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 4px;
+  }
+
+  /* PRODUCT GRID: 2 Columns on large mobile */
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 10px;
+  }
+
+  /* Card Adjustments */
+  .product-card img {
+    height: 150px; /* Smaller images */
+  }
+  
+  .card-body h3 {
+    font-size: 1rem;
+  }
+
+  /* PRODUCT DETAILS PAGE */
+  .detail-container {
+    flex-direction: column; /* Stack vertically */
+    padding: 15px;
+  }
+
+  .detail-image {
+    margin-bottom: 20px;
+  }
+  
+  .detail-image img {
+    max-height: 300px;
+  }
+}
+
+/* SMALL MOBILE (Width < 480px) */
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: 1fr; /* 1 Column on very small phones */
+  }
+  
+  .navbar {
+    padding: 0.5rem 1rem;
+  }
+}

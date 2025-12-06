@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-
+import './Navbar.css';
 
 const Navbar = () => {
   const [activeTab, setActiveTab] = useState(null);
