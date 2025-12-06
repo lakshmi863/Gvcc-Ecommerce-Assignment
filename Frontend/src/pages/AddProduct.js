@@ -10,7 +10,8 @@ const AddProduct = () => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [category, setCategory] = useState('Electronics');
-    const [description, setDescription] = useState('');
+    // FIX 1: Now using this state in the form below
+    const [description, setDescription] = useState(''); 
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
 
@@ -41,15 +42,16 @@ const AddProduct = () => {
                 imageUrl = uploadRes.data.imageUrl;
             }
 
-            // 2. Create Product Entry in Database (Assumes you have a CREATE product route)
-            // Note: Since we didn't write a POST /api/products yet, this is hypothetical.
-            // If you need the backend code for creating a product, see below.
+            // 2. Prepare Data (simulated create)
+            const productData = { name, price, category, description, imageUrl };
             
             console.log("Image Saved at:", imageUrl);
-            console.log("Product Data:", { name, price, category, description, imageUrl });
+            console.log("Product Data:", productData);
 
-            alert(`Image Uploaded Successfully! URL: ${imageUrl}`);
-            // navigate('/'); // Redirect after success
+            alert(`Image Uploaded Successfully! check console for data.`);
+            
+            // FIX 2: Redirect user to home page after success
+            navigate('/'); 
 
         } catch (error) {
             console.error(error);
@@ -61,7 +63,7 @@ const AddProduct = () => {
 
     return (
         <div className="container">
-            <div style={{maxWidth: '600px', margin: '20px auto', background: 'var(--bg-card)', padding: '20px', borderRadius: '8px', color: 'var(--text-main)'}}>
+            <div style={{maxWidth: '600px', margin: '20px auto', background: 'var(--bg-card)', padding: '20px', borderRadius: '8px', color: 'var(--text-main)', border: '1px solid var(--border-color)'}}>
                 <h2>Add New Product</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -77,10 +79,32 @@ const AddProduct = () => {
                     <div className="form-group">
                         <label>Category</label>
                         <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                            <option>Electronics</option>
-                            <option>Fashion</option>
-                            <option>Books</option>
+                            {/* Updated with all categories from your Navbar */}
+                            <option value="Electronics">Electronics</option>
+                            <option value="Audio">Audio</option>
+                            <option value="TV & Home Entertainment">TV & Home</option>
+                            <option value="Mobiles">Mobiles</option>
+                            <option value="Laptops & Accessories">Laptops</option>
+                            <option value="Smart Technologies">Smart Tech</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Kids">Kids Fashion</option>
+                            <option value="Men">Men's Fashion</option>
+                            <option value="Women">Women's Fashion</option>
+                            <option value="Bags & Luggage">Bags & Luggage</option>
+                            <option value="Sportswear">Sportswear</option>
+                            <option value="Books">Books</option>
                         </select>
+                    </div>
+
+                    {/* FIX 3: Added Description Input */}
+                    <div className="form-group">
+                        <label>Description</label>
+                        <textarea 
+                            value={description} 
+                            onChange={(e) => setDescription(e.target.value)} 
+                            required 
+                            style={{width: '100%', height: '80px', padding: '10px'}}
+                        />
                     </div>
 
                     <div className="form-group">

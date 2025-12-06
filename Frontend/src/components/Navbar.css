@@ -1,49 +1,185 @@
-/* Add this logic for mobile responsiveness */
+.nav-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
 
+.main-navbar {
+  background-color: var(--nav-bg);
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background-color 0.3s;
+}
+
+/* Brand */
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--nav-text);
+  font-weight: bold;
+  font-size: 1.4rem;
+}
+
+.nav-logo {
+  height: 40px;
+  background: white;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+/* Navigation Links (Middle) */
+.nav-links {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-item {
+  background: none;
+  border: none;
+  color: var(--nav-text);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 10px 15px;
+  transition: color 0.3s;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.nav-item:hover, .nav-item.active {
+  color: var(--accent-color);
+}
+
+/* Auth Section (Right) */
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding-left: 20px;
+  border-left: 1px solid #555;
+}
+
+.login-link {
+  text-decoration: none;
+  color: var(--nav-text);
+  font-weight: 600;
+}
+
+.user-greeting {
+  color: var(--accent-color);
+  font-size: 0.9rem;
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid var(--nav-text);
+  color: var(--nav-text);
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+}
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--nav-text);
+  color: var(--nav-text);
+  padding: 5px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- SUB NAVBAR --- */
+.sub-navbar {
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap; /* Wrap on small screens */
+}
+
+.sub-nav-item {
+  background: var(--input-bg);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 6px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.sub-nav-item:hover {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+/* =========================================
+   MOBILE RESPONSIVENESS (Navbar Fix)
+========================================= */
 @media (max-width: 768px) {
   .main-navbar {
-    flex-wrap: wrap; /* Allow items to wrap */
-    height: auto;
+    flex-wrap: wrap; /* Allows items to flow to next line */
+    height: auto;    /* Dynamic height */
     padding: 10px 15px;
   }
 
-  /* Top row: Brand + Auth */
-  .nav-container .navbar > div {
-    width: 100%;
-    justify-content: space-between;
+  /* ORDERING: Logo (1), Auth (2), Links (3) */
+  .nav-brand {
+    order: 1;
+    font-size: 1.2rem;
   }
 
-  /* Second row: Categories (Scrollable) */
-  .nav-links {
-    order: 3; /* Move to bottom */
-    width: 100%;
-    display: flex;
-    overflow-x: auto; /* Enable horizontal scrolling */
-    white-space: nowrap;
-    padding-bottom: 5px;
-    margin-top: 10px;
-    -webkit-overflow-scrolling: touch; /* Smooth scroll iOS */
+  .nav-auth {
+    order: 2;
+    border-left: none; /* Remove separator on mobile */
+    padding-left: 0;
     gap: 10px;
   }
 
-  /* Hide scrollbar visually */
+  /* Force links to new row */
+  .nav-links {
+    order: 3;
+    width: 100%; /* Take full width */
+    margin-top: 10px;
+    padding-top: 5px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    
+    /* Horizontal Scroll Logic */
+    overflow-x: auto;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Hide scrollbar visually but keep functionality */
   .nav-links::-webkit-scrollbar {
-    display: none; 
+    display: none;
   }
 
   .nav-item {
-    font-size: 0.9rem;
     padding: 8px 12px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 20px;
-    border: none;
+    font-size: 0.85rem;
+    background: rgba(255,255,255,0.05); /* Slight BG for visibility */
+    border-radius: 4px;
   }
 
-  /* Auth Section adjustments */
-  .navbar > div:last-child {
-    border-left: none !important;
-    padding-left: 0 !important;
-    margin-left: 0 !important;
-    margin-top: 0;
+  .user-greeting {
+    display: none; /* Hide name on small mobile to save space */
   }
 }

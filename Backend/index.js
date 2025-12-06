@@ -31,7 +31,7 @@ app.use('/api/enquiries', enquiryRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/upload', uploadRoutes);
 
-S
+
 // This allows the frontend to access uploaded images
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

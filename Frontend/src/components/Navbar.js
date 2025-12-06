@@ -8,17 +8,12 @@ const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // --- THEME LOGIC (Default to Dark) ---
   const [theme, setTheme] = useState(() => {
-    // 1. Check Local Storage first
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) return savedTheme;
-    
-    // 2. If no save found, Default to DARK automatically
     return 'dark'; 
   });
 
-  // Apply theme to HTML body whenever it changes
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
@@ -28,7 +23,6 @@ const Navbar = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  // --- NAVIGATION DATA ---
   const navData = {
     Electronics: [
       { label: "Audio", value: "Audio" },
@@ -46,7 +40,6 @@ const Navbar = () => {
     ],
     Books: []
   };
-
   const handleMainClick = (category) => {
     setActiveTab(category);
     navigate(`/?category=${category}`);
@@ -63,84 +56,58 @@ const Navbar = () => {
 
   return (
     <div className="nav-container">
-      {/* --- MAIN NAVBAR --- */}
       <nav className="navbar main-navbar">
-        {/* Left: Brand Logo */}
-        <div style={{display:'flex', alignItems:'center', gap:'20px'}}>
-            <Link to="/" className="nav-brand" onClick={() => setActiveTab(null)}>
-              <img src="/Gvcc.png" alt="Logo" className="nav-logo" />
-              <span className="brand-text">GVCC Solutions</span>
+        
+        {/* 1. BRAND LOGO */}
+        <Link to="/" className="nav-brand" onClick={() => setActiveTab(null)}>
+            <img src="/Gvcc.png" alt="Logo" className="nav-logo" />
+            <span className="brand-text">GVCC Solutions</span>
+        </Link>
+
+        {/* 2. NAVIGATION LINKS */}
+        <div className="nav-links">
+            {Object.keys(navData).map((cat) => (
+                <button 
+                key={cat} 
+                className={`nav-item ${activeTab === cat ? 'active' : ''}`}
+                onClick={() => handleMainClick(cat)}
+                >
+                {cat}
+                </button>
+            ))}
+            
+            <Link 
+              to="/add-product" 
+              className="nav-item" 
+              style={{textDecoration: 'none', display: 'inline-flex', alignItems: 'center'}}
+            >
+              Add Product
             </Link>
         </div>
 
-        {/* Right: Nav Links + Auth + Theme */}
-        <div style={{display:'flex', alignItems:'center'}}>
-            
-            {/* Category Links */}
-            <div className="nav-links">
-              {Object.keys(navData).map((cat) => (
-                  <button 
-                  key={cat} 
-                  className={`nav-item ${activeTab === cat ? 'active' : ''}`}
-                  onClick={() => handleMainClick(cat)}
-                  >
-                  {cat}
-                  </button>
-              ))}
+        {/* 3. AUTH & THEME BUTTONS (Added class 'nav-auth') */}
+        <div className="nav-auth">
+            {user ? (
+                <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                    <span className="user-greeting">Hi, {user.name.split(' ')[0]}</span>
+                    <button onClick={handleLogout} className="btn-logout">
+                        Logout
+                    </button>
+                </div>
+            ) : (
+                <Link to="/login" className="login-link">
+                    Login
+                </Link>
+            )}
 
-              {/* ✅ ADDED: Add Product Link (Visible to everyone, or wrap in {user && ...} to hide) */}
-              <Link 
-                to="/add-product" 
-                className="nav-item" 
-                style={{textDecoration: 'none', display: 'inline-flex', alignItems: 'center'}}
-              >
-                Add Product
-              </Link>
-            </div>
-
-            <div style={{marginLeft: '25px', display: 'flex', gap: '15px', alignItems: 'center', borderLeft: '1px solid #555', paddingLeft: '20px'}}>
-                
-                {/* Auth Section */}
-                {user ? (
-                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                        <span style={{color: 'var(--accent-color)', fontSize: '0.9rem'}}>Hi, {user.name}</span>
-                        <button 
-                            onClick={handleLogout} 
-                            style={{
-                              background:'transparent', 
-                              border:'1px solid var(--nav-text)', 
-                              color:'var(--nav-text)', 
-                              borderRadius:'4px', 
-                              cursor:'pointer', 
-                              padding:'4px 10px',
-                              fontSize: '0.8rem'
-                            }}
-                        >
-                            Logout
-                        </button>
-                    </div>
-                ) : (
-                    <Link 
-                        to="/login" 
-                        style={{textDecoration:'none', color:'var(--nav-text)', fontWeight:'600'}}
-                    >
-                        Login
-                    </Link>
-                )}
-
-                {/* Theme Toggle Button */}
-                <button 
-                  className="theme-toggle" 
-                  onClick={toggleTheme} 
-                  title="Toggle Light/Dark Mode"
-                >
-                    {theme === 'dark' ? '☀️' : '🌙'}
-                </button>
-            </div>
+            <button className="theme-toggle" onClick={toggleTheme} title="Toggle Theme">
+                {theme === 'dark' ? '☀️' : '🌙'}
+            </button>
         </div>
+
       </nav>
 
-      {/* --- SUB NAVBAR (Appears when activeTab has children) --- */}
+      {/* SUB NAVBAR */}
       {activeTab && navData[activeTab].length > 0 && (
         <div className="sub-navbar">
           {navData[activeTab].map((sub) => (
